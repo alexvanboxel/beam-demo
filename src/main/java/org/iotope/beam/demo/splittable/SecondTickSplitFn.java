@@ -34,14 +34,16 @@ public class SecondTickSplitFn extends DoFn<String, Long> {
 
     @ProcessElement
     public ProcessContinuation process(ProcessContext c, OffsetRangeTracker tracker) {
-        LOG.log(Level.INFO, tracker.currentRestriction().toString());
+        OffsetRange currentRestriction = tracker.currentRestriction();
+        LOG.info("Current Restriction is " + currentRestriction.toString());
 
-        long current = System.currentTimeMillis();
         long i = tracker.currentRestriction().getFrom();
+        long eventTimeMillis = i * (seconds * 1000);
+        long current = System.currentTimeMillis();
 
-        if (i * (seconds * 1000) <= current) {
+        if (eventTimeMillis <= current) {
             if (tracker.tryClaim(i)) {
-                Util.claimed(LOG, i);
+                Util.claimed(LOG, currentRestriction, i);
                 LOG.log(Level.INFO, "current second {0}", i * seconds);
                 c.output(i * seconds);
                 return Util.resume(LOG, delay(i + 1), "Delaying for next item");

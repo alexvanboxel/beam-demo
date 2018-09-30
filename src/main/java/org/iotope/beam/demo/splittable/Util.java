@@ -1,5 +1,6 @@
 package org.iotope.beam.demo.splittable;
 
+import org.apache.beam.sdk.io.range.OffsetRange;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.joda.time.Duration;
 
@@ -19,7 +20,15 @@ public class Util {
         return DoFn.ProcessContinuation.stop();
     }
 
-    public static void claimed(Logger LOG, long i) {
-        LOG.log(Level.INFO, "Claimed {0}", i);
+    /**
+     * Log the current claim, no side effects.
+     */
+    public static void claimed(Logger LOG, OffsetRange currentRestriction, long i) {
+        LOG.log(Level.INFO, "Claimed [{0}] on range " + currentRestriction.toString(), i);
+    }
+
+    public static void output(Logger LOG, OffsetRange currentRestriction, long claimPos, DoFn<String, Long>.ProcessContext c, long i) {
+        LOG.log(Level.INFO, "Output  [{0}] on range " + currentRestriction.toString() + " claim position: " + claimPos, i);
+        c.output(i);
     }
 }

@@ -13,13 +13,16 @@ import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
+import org.iotope.beam.demo.splittable.BoundedThousandFn;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class DemoPipelineBase implements Serializable {
 
+    private static Logger LOG = Logger.getLogger(DemoPipelineBase.class.toString());
     public static final String GOOGLE_PROJECT_ID = "GOOGLE_PROJECT_ID";
     public static final String MONGO_URL = "MONGO_URL";
     public static final String BQ_OUT_TABLE = "BQ_OUT_TABLE";
@@ -38,6 +41,7 @@ public class DemoPipelineBase implements Serializable {
     }
 
     private PipelineOptions createDirect() {
+        System.setProperty("java.util.logging.SimpleFormatter.format","%5$s%n");
         DirectOptions flinkOptions = PipelineOptionsFactory.as(DirectOptions.class);
 
         return flinkOptions;
@@ -63,7 +67,7 @@ public class DemoPipelineBase implements Serializable {
                 TableRow row = new TableRow();
                 row.set("out", c.element().toString());
                 c.output(row);
-                System.out.println(row.toString());
+                LOG.info(row.toString());
             }
         };
     }

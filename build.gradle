@@ -73,3 +73,9 @@ task runTickPerSecondPipeline(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     args "run"
 }
+
+task runScrapbookPipeline(type: JavaExec) {
+    main = "org.iotope.beam.demo.ScrapbookPipeline"
+    classpath = sourceSets.main.runtimeClasspath
+    args "run"
+}
