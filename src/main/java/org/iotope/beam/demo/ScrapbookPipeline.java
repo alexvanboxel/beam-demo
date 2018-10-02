@@ -3,9 +3,8 @@ package org.iotope.beam.demo;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.transforms.Create;
 import org.apache.beam.sdk.transforms.ParDo;
-import org.iotope.beam.demo.splittable.BoundedOverlapFn;
-import org.iotope.beam.demo.splittable.BoundedThousandFn;
-import org.iotope.beam.demo.splittable.UnBoundedFn;
+import org.iotope.beam.demo.splittable.UnBoundedLoopFn;
+import org.iotope.beam.demo.splittable.UnboundedOverlapFn;
 
 public class ScrapbookPipeline extends DemoPipelineBase {
 
@@ -18,7 +17,7 @@ public class ScrapbookPipeline extends DemoPipelineBase {
 
         Pipeline pipeline = createPipeline();
         pipeline.apply(Create.of("")).apply(
-                ParDo.of(new BoundedOverlapFn())
+                ParDo.of(new UnboundedOverlapFn())
         )
                 .apply(ParDo.of(longToStringFn()))
                 .apply(ParDo.of(stringToTableRowFn()))

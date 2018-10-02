@@ -33,16 +33,10 @@ public class BoundedThousandFn extends DoFn<String, Long> {
     }
 
     @SplitRestriction
-    public void splitRestriction(String element, OffsetRange restriction, DoFn.OutputReceiver<OffsetRange> ranges) {
-
-        long x1 = restriction.getFrom();
+    public void splitRestriction(String element, OffsetRange restriction, OutputReceiver<OffsetRange> ranges) {
         long x2 = restriction.getTo();
-
-
-        ranges.output(new OffsetRange(x1, x2 / 2));
+        ranges.output(new OffsetRange(restriction.getFrom(), x2 / 2));
         ranges.output(new OffsetRange(x2 / 2, x2));
-
         System.out.println();
-//        return null;
     }
 }

@@ -104,7 +104,7 @@ public class MongoDbChangeStreamFn extends DoFn<String, String> {
                 c.updateWatermark(Instant.now());
                 Object fullDoc = next.getFullDocument();
                 if (fullDoc != null) {
-                    String json = ((Document)fullDoc).toJson();
+                    String json = ((Document) fullDoc).toJson();
                     System.out.println("OpType" + next.getOperationType().toString());
                     c.outputWithTimestamp(json, Instant.now());
                 } else {
@@ -121,19 +121,4 @@ public class MongoDbChangeStreamFn extends DoFn<String, String> {
     public OffsetRange getInitialRestriction(String in) {
         return new OffsetRange(System.currentTimeMillis(), Long.MAX_VALUE);
     }
-
-//    @SplitRestriction
-//    public void splitRestriction(String element, OffsetRange restriction, DoFn.OutputReceiver<OffsetRange> ranges) {
-//
-//        long x1 = restriction.getFrom();
-//        long x2 = restriction.getTo();
-//
-//
-////
-////        ranges.output(new OffsetRange(0, 500));
-////        ranges.output(new OffsetRange(500, 1000));
-//
-//        System.out.println();
-////        return null;
-//    }
 }

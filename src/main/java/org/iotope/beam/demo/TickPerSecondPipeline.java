@@ -16,7 +16,7 @@ public class TickPerSecondPipeline extends DemoPipelineBase {
 
         Pipeline pipeline = createPipeline();
         pipeline.apply(Create.of("")).apply(
-                ParDo.of(new SecondTickSplitFn(60))
+                ParDo.of(new SecondTickSplitFn(5))
         )
                 .apply(ParDo.of(longToStringFn()))
                 .apply(ParDo.of(stringToTableRowFn()))
